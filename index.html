@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gachime - Personagens</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+
+    #level-buttons {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #121212;
+      padding: 0.5rem;
+      display: flex;
+      justify-content: center;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.8);
+    }
+    #level-buttons button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: gold;
+      margin: 0 5px;
+      opacity: 0.3;
+      transition: opacity 0.3s ease;
+    }
+    #level-buttons button.active,
+    #level-buttons button.preenchido {
+      opacity: 1;
+    }
+
+    .stars {
+      color: gold;
+      font-size: 18px;
+    }
+    .stars.empty {
+      opacity: 0.3;
+    }
+
+    table img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+
+    body {
+      padding-top: 50px;
+      background: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
+      margin:0; padding:1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Personagens</h1>
+
+    <div id="level-buttons"></div>
+
+    <div class="tabela-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Imagem</th>
+            <th>Nome</th>
+            <th>Poder</th>
+            <th>Raridade</th>
+            <th>Nível</th>
+          </tr>
+        </thead>
+        <tbody id="personagem-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const characters = {
+    1: {"name": "Naruto Uzumaki (Clássico)", "type": "Comum", "character_power": 500, "level": 1, "image_url": "https://i.ibb.co/HDXL7Cj3/CGOJc-7-HQ7u-ZSU9-LEYlio-A.png"},
+    6: {"name": "Sasuke Uchiha (Clássico)", "type": "Comum", "character_power": 750, "level": 1, "image_url": "https://i.ibb.co/3gR6hwx/y-Jw8-X0-J5-TOCCUp8m-AM1y-Yw.png"},
+    11: {"name": "Sakura Haruno (Clássico)", "type": "Comum", "character_power": 400, "level": 1, "image_url": "https://i.ibb.co/XxZBh2bs/9-BLCFG6h-S8-CMp-Gh51-V1-Gu-Q.png"},
+    16: {"name": "Rock Lee (Clássico)", "type": "Comum", "character_power": 900, "level": 1, "image_url": "https://i.ibb.co/GfGfh6hG/image.png"},
+    21: {"name": "Tenten (Clássico)", "type": "Comum", "character_power": 450, "level": 1, "image_url": "https://i.ibb.co/YBBwPg1F/h-y-Ss2m-STy-GA2x9y-Wg0p0w.png"},
+    26: {"name": "Iruka Umino", "type": "Comum", "character_power": 500, "level": 1, "image_url": "https://i.ibb.co/gZGWM8zQ/Rfn5tyb-UTqu-L2ubn1ouk-Cw.png"},
+    31: {"name": "Konohamaru (Clássico)", "type": "Comum", "character_power": 350, "level": 1, "image_url": "https://i.ibb.co/7dpHRRsg/B5j-Iyd-Uz-Qtq8-C1z-Wxc-Vaqg.png"},
+    36: {"name": "Kakashi Hatake ", "type": "Raro", "character_power": 3000, "level": 1, "image_url": "https://i.ibb.co/sLx9KWT/Xi-3k-Th4-Tp-Rl-Gf-H7-KZumw.png"},
+    41: {"name": "Gaara (Clássico)", "type": "Comum", "character_power": 600, "level": 1, "image_url": "https://i.ibb.co/GvxBFMNZ/kxw8-GYVh-TBm6f6-LKo07-VKQ.png"},
+    46: {"name": "Kiba Inuzuka (Clássico)", "type": "Comum", "character_power": 300, "level": 1, "image_url": "https://i.ibb.co/QFRRs1Rs/MXL3f-Sw-FRg-Gm-UW-v-Vh-G4-EA.png"},
+    51: {"name": "Akamaru (Filhote)", "type": "Comum", "character_power": 120, "level": 1, "image_url": "https://i.ibb.co/pvYQmF2B/w-Ha3sz44-TS-ld730h-DGAq-A.png"},
+    56: {"name": "Choji Akimichi (Clássico)", "type": "Comum", "character_power": 300, "level": 1, "image_url": "https://i.ibb.co/rf1k2DzF/Us-Xj1gqx-Rz-Sv-XCZJlsh-MGw.png"},
+    61: {"name": "Neji Hyuga (Clássico)", "type": "Comum", "character_power": 750, "level": 1, "image_url": "https://i.ibb.co/fGDp3rW3/g-Wvpmpz-BQJ6-FVf4-HIm-Qm-JQ.png"},
+    66: {"name": "Hinata Hyuga (Clássico)", "type": "Comum", "character_power": 400, "level": 1, "image_url": "https://i.ibb.co/NgWt45yN/t-XBSFf-Yf-SQKe-XHy-Ps84ay-Q.png"},
+    71: {"name": "Ino Yamanaka (Clássico)", "type": "Comum", "character_power": 350, "level": 1, "image_url": "https://i.ibb.co/svLytF17/u02c3cj-NSB6jbn-Hlpvq-GRA.png"},
+    76: {"name": "Shikamaru Nara (Clássico)", "type": "Comum", "character_power": 450, "level": 1, "image_url": "https://i.ibb.co/gM9bbsbD/F6o-Jc0-Kz-RUaw-EAO8-Sste4-Q.png"},
+    81: {"name": "Naruto Uzumaki (Shippuden)", "type": "Raro", "character_power": 4000, "level": 1, "image_url": "https://i.ibb.co/fz82pJs4/FNJW3mb-VSFe4-D3-Hpc8-Lt-Jg.png"},
+    86: {"name": "Sasuke Uchiha (Shippuden)", "type": "Raro", "character_power": 4000, "level": 1, "image_url": "https://i.ibb.co/206MKqP1/8-Gzjojb-KSh-Kurp-CRLlx-Yag.png"},
+    91: {"name": "Pain (Caminho Deva)", "type": "Raro", "character_power": 3800, "level": 1, "image_url": "https://i.ibb.co/4ZvVZFR7/Sgzz0q-CDQq-WTle-KMNLFGz-A.png"},
+    96: {"name": "Pain (Caminho Asura)", "type": "Raro", "character_power": 3500, "level": 1, "image_url": "https://i.ibb.co/BKgwBykR/2-PQ9s92-QQZmaxhyzcm-X6k-A.png"},
+    101: {"name": "Pain (Caminho Humano)", "type": "Raro", "character_power": 3500, "level": 1, "image_url": "https://i.ibb.co/5X9ZwrNh/x-Z-AIr2g-Sf-KZPESt9-IKojw.png"},
+    106: {"name": "Pain (Caminho Animal)", "type": "Raro", "character_power": 3500, "level": 1, "image_url": "https://i.ibb.co/ynZLsbkb/nn-W2gzkd-ROS8-K9-Tv-BKAh-Gw.png"},
+    111: {"name": "Pain (Caminho Preta)", "type": "Raro", "character_power": 3500, "level": 1, "image_url": "https://i.ibb.co/zWxWcnrC/f-Bqe6-IC-RLWIp-Ssjg3-Lx-AA.png"},
+    116: {"name": "Konan", "type": "Raro", "character_power": 3000, "level": 1, "image_url": "https://i.ibb.co/8DMCyR6z/007-IIfl-AQQ2-Hr6y-C5u-OW2w.png"},
+    121: {"name": "Sakura Haruno (Shippuden)", "type": "Raro", "character_power": 2000, "level": 1, "image_url": "https://i.ibb.co/bjCLbnBg/hs-By-Jp0k-SLKnq-LWZHZ5-PLQ.png"},
+    126: {"name": "Gaara (Shippuden)", "type": "Raro", "character_power": 2800, "level": 1, "image_url": "https://i.ibb.co/GQm9bgfH/f4-Qs9-YRh-THW7y-Pg2-MEMNr-A.png"},
+    131: {"name": "Kiba Inuzuka (Shippuden)", "type": "Raro", "character_power": 1300, "level": 1, "image_url": "https://i.ibb.co/X95chd6/L5-Jf-N7i-Rh-G6-D-Xn-Dj-Uh-LQ.png"},
+    136: {"name": "Akamaru (Adulto)", "type": "Comum", "character_power": 320, "level": 1, "image_url": "https://i.ibb.co/pjmJcYMR/E84ppzro-Q8a1-Co-YHU4-Nfzw.png"},
+    141: {"name": "Choji Akimichi (Shippuden)", "type": "Raro", "character_power": 1200, "level": 1, "image_url": "https://i.ibb.co/v4TG4RRt/S5m-G5-DOw-Rli72c-P2-AFJ1-BQ.png"},
+    146: {"name": "Tenten (Shippuden)", "type": "Raro", "character_power": 1100, "level": 1, "image_url": "https://i.ibb.co/D0kpL24/y-Pja-AMu-UQVSWFh-KK9-Bbwvg.png"},
+    151: {"name": "Neji Hyuga (Shippuden)", "type": "Raro", "character_power": 2100, "level": 1, "image_url": "https://i.ibb.co/MD5bF8nv/Azr-L7sn-EQqiwdqhy-Tpl8-Aw.png"},
+    156: {"name": "Hinata Hyuga (Shippuden)", "type": "Raro", "character_power": 2000, "level": 1, "image_url": "https://i.ibb.co/f7vmkpH/w5-Ufitzj-QICO-IXP922yb-A.png"},
+    161: {"name": "Ino Yamanaka (Shippuden)", "type": "Raro", "character_power": 1200, "level": 1, "image_url": "https://i.ibb.co/nM1kSycX/CJXNK4-PSRLCz-C1-T6-Hjktr-A.png"},
+    166: {"name": "Shikamaru Nara (Shippuden)", "type": "Raro", "character_power": 1600, "level": 1, "image_url": "https://i.ibb.co/G4shGWHS/wh-Zj-EDGXTva-Ba-Inow-OVi-MQ.png"},
+    171: {"name": "Minato Uzumaki", "type": "Elite", "character_power": 9000, "level": 1, "image_url": "https://i.ibb.co/Y718GzKP/kn1l-Vp-Mx-TOmzkrrfmznc6-Q.png"},
+    176: {"name": "Madara Uchiha", "type": "Elite", "character_power": 10000, "level": 1, "image_url": "https://i.ibb.co/WNdGN842/Um-NVCze-Q4-6-Pkjaf-Ttq-GA.png"},
+    181: {"name": "Obito", "type": "Elite", "character_power": 8500, "level": 1, "image_url": "https://i.ibb.co/svwLFZWm/VRIz-Rh-V5-Tt-Kno-S1t-Ri-K6-Eg.png"},
+    186: {"name": "Orochimaru", "type": "Elite", "character_power": 8200, "level": 1, "image_url": "https://i.ibb.co/XwSKDqB/Ku03-AE1-MSOWa-AO4t51-Jq-EQ.png"},
+    191: {"name": "Tsunade", "type": "Elite", "character_power": 6000, "level": 1, "image_url": "https://i.ibb.co/HLtk2WMx/Ivdof6-YSkuh-Zf9-N0k2-ZTQ.png"},
+    196: {"name": "Jiraiya", "type": "Elite", "character_power": 8100, "level": 1, "image_url": "https://i.ibb.co/QvsDhDW7/zp-M3-JQtv-SYK2ub-Mk0gz-Gww.png"},
+    201: {"name": "Kaguya Otsutsuki", "type": "Lendária", "character_power": 30000, "level": 1, "image_url": "https://i.ibb.co/rRLzdxCx/n5-KNf-QGf-S5-Gx0-Y5o-1gv-A.png"},
+    206: {"name": "Madara Uchiha [Jinchuuriki]", "type": "Lendária", "character_power": 29000, "level": 1, "image_url": "https://i.ibb.co/N2GXYyBz/o-EHj3f-Hr-Sp-CLc7uy-TMW8-XA.png"},
+    211: {"name": "Minato Uzumaki [Kurama]", "type": "Elite", "character_power": 12000, "level": 1, "image_url": "https://i.ibb.co/LzhzJSt4/image.png"},
+    216: {"name": "Naruto Uzumaki [Kurama]", "type": "Elite", "character_power": 14000, "level": 1, "image_url": "https://i.ibb.co/wrp1YFsN/image.png"},
+    221: {"name": "Obito Uchiha [Jinchuuriki]", "type": "Lendária", "character_power": 24000, "level": 1, "image_url": "https://i.ibb.co/jPHtr1Ct/image.png"},
+    226: {"name": "Yahiko", "type": "Raro", "character_power": 2200, "level": 1, "image_url": "https://i.ibb.co/938jb9vh/image.png"},
+    231: {"name": "Hashirama Senju", "type": "Elite", "character_power": 10000, "level": 1, "image_url": "https://i.ibb.co/rGKnx2bN/image.png"},
+    236: {"name": "Tobirama Senju", "type": "Elite", "character_power": 9200, "level": 1, "image_url": "https://i.ibb.co/twyZskLn/image.png"},
+    241: {"name": "Hiruzen Saturobi", "type": "Elite", "character_power": 8600, "level": 1, "image_url": "https://i.ibb.co/Kx5YM1pb/image.png"},
+    246: {"name": "Kakashi Hatake [Hokage]", "type": "Elite", "character_power": 8000, "level": 1, "image_url": "https://i.ibb.co/GfW2Xtgd/image.png"},
+    251: {"name": "Tobi", "type": "Elite", "character_power": 8100, "level": 1, "image_url": "https://i.ibb.co/GfW2Xtgd/image.png"},
+    256: {"name": "Itachi Uchiha", "type": "Raro", "character_power": 4500, "level": 1, "image_url": "https://i.ibb.co/tTmM2yNy/image.png"},
+    261: {"name": "Itachi Uchiha [Susano'o]", "type": "Elite", "character_power": 9500, "level": 1, "image_url": "https://i.ibb.co/chB32TYw/image.png"},
+    261: {"name": "Sasuke Uchiha [Susano'o]", "type": "Elite", "character_power": 9000, "level": 1, "image_url": "https://i.ibb.co/9f6rhgS/image.png"},
+    266: {"name": "Sasori", "type": "Raro", "character_power": 2500, "level": 1, "image_url": "https://i.ibb.co/ymCC2Rwm/image.png"},
+    271: {"name": "Deidara", "type": "Raro", "character_power": 2800, "level": 1, "image_url": "https://i.ibb.co/MyMjYmrz/image.png"},
+    276: {"name": "Kakuzu", "type": "Raro", "character_power": 2300, "level": 1, "image_url": "https://i.ibb.co/1fCK6QrM/image.png"},
+    281: {"name": "Hidan", "type": "Raro", "character_power": 2300, "level": 1, "image_url": "https://i.ibb.co/fztBxwTW/image.png"},
+    286: {"name": "Kisame", "type": "Raro", "character_power": 2700, "level": 1, "image_url": "https://i.ibb.co/XfPS5f8x/image.png"},
+    291: {"name": "Zetsu", "type": "Raro", "character_power": 2000, "level": 1, "image_url": "https://i.ibb.co/JwNt9Fmt/image.png"},
+    296: {"name": "Gai", "type": "Raro", "character_power": 3000, "level": 1, "image_url": "https://i.ibb.co/DDj3TtV5/image.png"},
+    301: {"name": "Gai [Oitavo Portão da Morte]", "type": "Lendária", "character_power": 25000, "level": 1, "image_url": "https://i.ibb.co/pr2VTr66/image.png"},
+    306: {"name": "Shino", "type": "Comum", "character_power": 300, "level": 1, "image_url": "https://i.ibb.co/BVszKXnq/image.png"},
+    311: {"name": "Shino (Shippuden)", "type": "Raro", "character_power": 1200, "level": 1, "image_url": "https://i.ibb.co/tpxWFTmp/image.png"},
+    316: {"name": "Darui", "type": "Raro", "character_power": 3000, "level": 1, "image_url": "https://i.ibb.co/35TWjJF3/image.png"},
+    321: {"name": "Danzou", "type": "Elite", "character_power": 8000, "level": 1, "image_url": "https://i.ibb.co/p63h0G9m/image.png"},
+    326: {"name": "Shisui Uchiha", "type": "Raro", "character_power": 4400, "level": 1, "image_url": "https://i.ibb.co/bgxWvmG2/image.png"},
+    331: {"name": "Shisui Uchiha [Susano'o]", "type": "Elite", "character_power": 9500, "level": 1, "image_url": "https://i.ibb.co/YBdN0wzG/image.png"},
+    336: {"name": "Kabuto", "type": "Comum", "character_power": 700, "level": 1, "image_url": "https://i.ibb.co/nN9gR1rc/image.png"},
+    341: {"name": "Kabuto [Cobra]", "type": "Raro", "character_power": 4500, "level": 1, "image_url": "https://i.ibb.co/jkwykzkN/image.png"},
+    346: {"name": "Kimimaro", "type": "Comum", "character_power": 1000, "level": 1, "image_url": "https://i.ibb.co/GQkNQvf1/image.png"},
+    351: {"name": "Juugo", "type": "Comum", "character_power": 750, "level": 1, "image_url": "https://i.ibb.co/S7fs7xx1/image.png"},
+    356: {"name": "Suigetsu", "type": "Comum", "character_power": 850, "level": 1, "image_url": "https://i.ibb.co/21rBCjFP/image.png"},
+    361: {"name": "Karin", "type": "Comum", "character_power": 700, "level": 1, "image_url": "https://i.ibb.co/nstRvgXz/image.png"},
+    366: {"name": "Naruto [Rikudou Sennin]", "type": "Lendária", "character_power": 28000, "level": 1, "image_url": "https://i.ibb.co/Q1XNCK9/image.png"},
+    371: {"name": "Sasuke [Rikudou Sennin]", "type": "Lendária", "character_power": 28000, "level": 1, "image_url": "https://i.ibb.co/93r0PWq5/sasasa.png"},
+    376: {"name": "Kin Tsuchi", "type": "Comum", "character_power": 250, "level": 1, "image_url": "https://i.ibb.co/MkqBpJ62/image.png"},
+    381: {"name": "Zaku Abumi", "type": "Comum", "character_power": 250, "level": 1, "image_url": "https://i.ibb.co/QjhFXbZB/image.png"},
+    386: {"name": "Dosu Kinuta", "type": "Comum", "character_power": 250, "level": 1, "image_url": "https://i.ibb.co/N6t5xRdc/image.png"},
+    391: {"name": "Mizuki", "type": "Comum", "character_power": 200, "level": 1, "image_url": "https://i.ibb.co/chT8yfcq/image.png"},
+    396: {"name": "Idate", "type": "Comum", "character_power": 260, "level": 1, "image_url": "https://i.ibb.co/2HNCrcf/image.png"},
+    401: {"name": "Kagari", "type": "Comum", "character_power": 240, "level": 1, "image_url": "https://i.ibb.co/BHzD3RgQ/image.png"},
+    406: {"name": "Temari (Clássico)", "type": "Comum", "character_power": 370, "level": 1, "image_url": "https://i.ibb.co/XkJnpQDN/image.png"},
+    411: {"name": "Temari (Shippuden)", "type": "Raro", "character_power": 1200, "level": 1, "image_url": "https://i.ibb.co/WNvdBLTD/image.png"},
+    416: {"name": "Mu (Segundo Tsuchikage)", "type": "Elite", "character_power": 7200, "level": 1, "image_url": "https://i.ibb.co/WNvdBLTD/image.png"},
+    421: {"name": "Udon Ise", "type": "Comum", "character_power": 150, "level": 1, "image_url": "https://i.ibb.co/rKfwf15t/image.png"},
+    426: {"name": "Mei Terumi", "type": "Elite", "character_power": 5000, "level": 1, "image_url": "https://i.ibb.co/WWYG6GtS/image.png"},
+    431: {"name": "A (Quarto Raikage)", "type": "Elite", "character_power": 5600, "level": 1, "image_url": "https://i.ibb.co/MxLLs7XX/image.png"},
+    436: {"name": "Oonoki", "type": "Elite", "character_power": 5900, "level": 1, "image_url": "https://i.ibb.co/gqfPyYx/image.png"},
+    441: {"name": "Gengetsu Hoozuki", "type": "Elite", "character_power": 5400, "level": 1, "image_url": "https://i.ibb.co/qLsm466j/image.png"},
+    446: {"name": "Killer B", "type": "Elite", "character_power": 6000, "level": 1, "image_url": "https://i.ibb.co/ZpCLHckn/image.png"},
+    451: {"name": "Haku", "type": "Comum", "character_power": 450, "level": 1, "image_url": "https://i.ibb.co/Ngg27F19/image.png"},
+    456: {"name": "Zabuza Momochi", "type": "Raro", "character_power": 2700, "level": 1, "image_url": "https://i.ibb.co/VW63gssy/image.png"},
+    };
+
+    const raridadeOrder = { 'Comum': 1, 'Raro': 2, 'Elite': 3, 'Lendária': 4 };
+    const tbody = document.getElementById('personagem-body');
+    const levelButtonsContainer = document.getElementById('level-buttons');
+
+    let currentLevel = 1;
+
+    function createLevelButtons() {
+      for(let i = 1; i <= 5; i++) {
+        const btn = document.createElement('button');
+        btn.innerHTML = '⭐';
+        btn.dataset.level = i;
+        btn.addEventListener('click', () => {
+          currentLevel = i;
+          updateLevelButtons();
+          renderTable();
+        });
+        levelButtonsContainer.appendChild(btn);
+      }
+      updateLevelButtons();
+    }
+
+    function updateLevelButtons() {
+      [...levelButtonsContainer.children].forEach((btn) => {
+        const btnLevel = Number(btn.dataset.level);
+        btn.classList.toggle('active', btnLevel === currentLevel);
+        btn.classList.toggle('preenchido', btnLevel <= currentLevel);
+      });
+    }
+
+    // Aqui a diferença: gera estrelas conforme o nível DO BOTÃO ativo (currentLevel)
+    function generateStars(level) {
+      let starsHTML = '';
+      for(let i = 1; i <= 5; i++) {
+        starsHTML += `<span class="stars ${i <= level ? '' : 'empty'}">⭐</span>`;
+      }
+      return starsHTML;
+    }
+
+    function renderTable() {
+      tbody.innerHTML = '';
+
+      // Ordem por raridade e poder (ordenando só para visual melhor)
+      const arr = Object.values(characters).sort((a, b) => {
+        const raridadeDiff = raridadeOrder[a.type] - raridadeOrder[b.type];
+        if(raridadeDiff !== 0) return raridadeDiff;
+        return a.character_power - b.character_power;
+      });
+
+      arr.forEach(c => {
+        // Poder calculado multiplicando power do personagem pela potência do botão (currentLevel)
+        const power = c.character_power * Math.pow(3, currentLevel - 1);
+
+        const tr = document.createElement('tr');
+        tr.classList.add(c.type.toLowerCase() + '-row');
+        tr.innerHTML = `
+          <td><img src="${c.image_url}" alt="${c.name}" loading="lazy"></td>
+          <td>${c.name}</td>
+          <td>⚔️ ${power}</td>
+          <td class="${c.type.toLowerCase()}">${c.type}</td>
+          <td>${generateStars(currentLevel)}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    createLevelButtons();
+    renderTable();
+  </script>
+</body>
+</html>

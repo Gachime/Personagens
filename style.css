@@ -1,0 +1,57 @@
+body {
+  background: #121212;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', sans-serif;
+  margin:0; padding:1rem;
+}
+.container {
+  max-width:800px;
+  margin:0 auto;
+  text-align:center;
+}
+h1 {
+  font-size:1.8rem;
+  color:#FFA726;
+  margin-bottom:1rem;
+}
+.tabela-wrapper {
+  overflow-x:auto;
+}
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.8rem;
+}
+th, td {
+  padding:0.4rem;
+  text-align:left;
+  border-bottom:1px solid #2e2e2e;
+}
+th {
+  background:#1f1f1f;
+  color:#ffcc80;
+  text-transform:uppercase;
+  font-size:0.75rem;
+}
+tbody tr:hover {
+  background: rgba(255,255,255,0.05);
+}
+td img {
+  width: 50px;
+  height:50px;
+  object-fit:cover;
+  border-radius:4px;
+}
+.comum-row { background:#102b40; }
+.raro-row { background:#3a3300; }
+.elite-row { background:#3d1f00; }
+.lendaria-row { background:#000; }
+.comum { color:#4FC3F7; font-weight:bold; }
+.raro { color:#FFEB3B; font-weight:bold; }
+.elite { color:#FF7043; font-weight:bold; }
+.lendaria {
+  background: linear-gradient(to right,#fff,#aaa);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  font-weight:bold;
+}
